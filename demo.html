@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_581148_bq76mur51jdcxr.css" type="text/css" />
+    <title>Title</title>
+    <style>
+
+
+
+        #board{
+            background: #ff9900;
+            overflow: hidden;
+            padding:20px 20px;
+            padding-bottom:0px;
+            width:500px;
+            height:500px;
+        }
+        #wrapper{
+            background: #ff9900;
+            width:540px;
+            margin:30px;
+        }
+
+
+
+        .chesscol{
+            padding:0;
+            margin:0;
+           float:left;
+
+        }
+       .grid{
+           height:25px;
+           width:25px;
+           margin:0;
+           background-size:contain ;
+            text-align: center;
+           line-height:26px;
+           font-size:10px;
+       }
+        .grid:hover{
+            cursor:default;
+        }
+
+        .cordtop{
+            height:12px;
+            width:25px;
+            margin:0;
+            padding-top:10px;
+            text-align: center;
+            line-height:12px;
+            font-size:10px;
+        }
+
+        .cordleft{
+            height:25px;
+            width:12px;
+            margin:0;
+            padding-left:10px;
+            text-align: center;
+            line-height:20px;
+            font-size:10px;
+        }
+
+        #tool{
+            clear:both;
+            height:48px;
+            margin:auto;
+
+        }
+        #tool ul {
+            margin-top:0;
+            padding:0;
+            padding-bottom:20px;
+        }
+        #panel_nav{
+            float:right;
+            margin-right: 30px;
+        }
+        #tool ul li{
+            color:#444;
+            list-style: none;
+            display: inline;
+
+        }
+
+        #tool ul li i{
+            font-size:28px;
+            vertical-align: middle;
+        }
+
+        #tool ul li input{
+            height:16px;
+            line-height:16px;
+            vertical-align: middle;
+            width:24px;
+        }
+
+        #btn_search{
+            font-size:24px !important;
+            margin-left:2px;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="board"></div>
+    <div id="tool">
+        <ul id="panel_nav">
+            <li id="first" onclick="qipu.stepFirst()"><i class="iconfont icon-ai10"></i></li>
+            <li id="prev" onclick="qipu.stepBack()"><i class="iconfont icon-shangyiye"></i></li>
+            <li id="search"><input type="text" size="2"  id="searchstep" /><i class="iconfont icon-sousuo" id="btn_search"></i></li>
+            <li id="next" onclick="qipu.stepNext()"><i class="iconfont icon-xiayiye"></i></li>
+            <li id="last" onclick="qipu.stepLast()"><i class="iconfont icon-ai09"></i></li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="tulipgo.js"></script>
+<script type="text/javascript">
+    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:480});
+    qipu.init('board');
+    let btn_search=document.getElementById('btn_search');
+    btn_search.addEventListener('click',function () {
+        let num=document.getElementById('searchstep').value;
+        if(isNaN(num) || parseInt(num)<0 || parseInt(num)>qipu.records.length ||num=='' ){
+            return;
+        }else{
+            console.log(num);
+            qipu.stepTo(num);
+        }
+    })
+</script>
+
+</body>
+</html>
