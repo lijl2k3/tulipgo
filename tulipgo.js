@@ -174,10 +174,10 @@ function Go(options) {
         let captured = [];
         for (let group of this.group[color]) {
             if (this.checkEat(group) == false) {
-                captured = captured.concat(group); //合并所提棋子块内的棋子
-                captured=captured.map(function (group) {
-                    return group.stone;
+                group=group.map(function (data) {
+                    return data.stone;
                 })
+                captured = captured.concat(group); //合并所提棋子块内的棋子
                 if (captured.length == 1 && this.ko.length > 0) { //如果提了一个子，则进行打劫检测
                     if (!this.checkKo(gid)) {
                         return -1;
@@ -239,16 +239,16 @@ function Go(options) {
 
     //在棋盘画面上清除死子，改变棋子编号图像
     Go.prototype.makeGrid = function (gid) {
-        if (gid == 0) grid = 'grid_lt.jpg';
-        else if (gid == 18) grid = 'grid_lb.jpg';
-        else if (gid == 342) grid = 'grid_rt.jpg';
-        else if (gid == 360) grid = 'grid_rb.jpg';
-        else if (gid == 60 || gid == 174 || gid == 288 || gid == 294 || gid == 300 || gid == 186 || gid == 72 || gid == 66 || gid == 180) grid = 'grid_star.jpg';
-        else if (gid < 19) grid = 'grid_l.jpg';
-        else if (gid > 341) grid = 'grid_r.jpg';
-        else if (gid % 19 == 0) grid = 'grid_t.jpg';
-        else if (gid % 19 == 18) grid = 'grid_b.jpg';
-        else grid = 'grid.jpg';
+        if (gid == 0) grid = 'grid_lt.gif';
+        else if (gid == 18) grid = 'grid_lb.gif';
+        else if (gid == 342) grid = 'grid_rt.gif';
+        else if (gid == 360) grid = 'grid_rb.gif';
+        else if (gid == 60 || gid == 174 || gid == 288 || gid == 294 || gid == 300 || gid == 186 || gid == 72 || gid == 66 || gid == 180) grid = 'grid_star.gif';
+        else if (gid < 19) grid = 'grid_l.gif';
+        else if (gid > 341) grid = 'grid_r.gif';
+        else if (gid % 19 == 0) grid = 'grid_t.gif';
+        else if (gid % 19 == 18) grid = 'grid_b.gif';
+        else grid = 'grid.gif';
         return grid;
     }
 
