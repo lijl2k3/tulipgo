@@ -172,23 +172,31 @@ function Go(options) {
     Go.prototype.checkEnemy = function (gid) {
         let color = (this.turn == 0) ? 1 : 0;
         let captured = [];
+        let groupindex=[];
         for (let group of this.group[color]) {
             if (this.checkEat(group) == false) {
-                group=group.map(function (data) {
+                let stones=group.map(function (data) {
                     return data.stone;
                 })
-                captured = captured.concat(group); //合并所提棋子块内的棋子
-                if (captured.length == 1 && this.ko.length > 0) { //如果提了一个子，则进行打劫检测
-                    if (!this.checkKo(gid)) {
-                        return -1;
-                    }
-                }
-                if (captured.length == 1) { //如果提了一子，且过了打劫检测，则设置打劫属性以备以后打劫判断
-                    this.ko = [captured[0], gid];
-                }
-                this.group[color].splice(this.group[color].indexOf(group), 1); //从当前棋块中删除被提子的棋块
+                captured = captured.concat(stones); //合并所提棋子块内的棋子
+                groupindex.push(this.group[color].indexOf(group));
             }
         }
+        if (captured.length == 1 && this.ko.length > 0) { //如果提了一个子，则进行打劫检测
+            if (!this.checkKo(gid)) {
+                return -1;
+            }
+        }
+        if (captured.length == 1) { //如果提了一子，且过了打劫检测，则设置打劫属性以备以后打劫判断
+            this.ko = [captured[0], gid];
+        }
+
+        for(num of groupindex){
+            this.group[color].splice(num, 1); //从当前棋块中删除被提子的棋块
+        }
+
+
+
         this.captured[color] += captured.length; //合计对手被提子数
         return captured;
     }
