@@ -20,7 +20,7 @@ function Go(options) {
         let html = this.drawBoard();
         let board=document.getElementById(this.divname);
         board.style.width=this.boardwidth+'px';
-        console.log(this.boardwidth);
+        //console.log(this.boardwidth);
         board.innerHTML = html;
         if(this.showcords){
             this.setCordinate();
@@ -305,7 +305,8 @@ function Go(options) {
 
     //在棋块中查找棋子，如找到则返回棋子步序  gid: dom编号 turn:黑/白
     Go.prototype.findGridInGroup=function (gid,turn) {
-        for (let group of this.group[turn]){
+        let groups=this.grouprecords[this.step-1];
+        for (let group of groups[turn]){
             index=group.find(function (data) {
                 return gid==data.stone;
             })
@@ -448,8 +449,13 @@ function Go(options) {
     //撤销落子
     Go.prototype.undo=function () {
         this.grouprecords.pop();
-        this.group=this.grouprecords[this.grouprecords.length-1];
+        if(this.grouprecords.length>0) {
+            let group = this.grouprecords[this.grouprecords.length - 1];
+        }
+        else  group={0:[],1:[]};
+        this.group=JSON.parse(JSON.stringify(group));
         this.records.pop();
+        this.turn=(this.turn==0)?1:0;
         this.stepLast();
     }
 

@@ -116,6 +116,7 @@
     <div id="board"></div>
     <div id="tool">
         <ul id="panel_nav">
+            <li id="undo" onclick="qipu.undo()"><i class="iconfont icon-chexiao"></i></li>
             <li id="first" onclick="qipu.stepFirst()"><i class="iconfont icon-ai10"></i></li>
             <li id="prev" onclick="qipu.stepBack()"><i class="iconfont icon-shangyiye"></i></li>
             <li id="search"><input type="text" size="2"  id="searchstep" /><i class="iconfont icon-sousuo" id="btn_search"></i></li>
@@ -134,7 +135,6 @@
         if(isNaN(num) || parseInt(num)<0 || parseInt(num)>qipu.records.length ||num=='' ){
             return;
         }else{
-            console.log(num);
             qipu.stepTo(num);
         }
     })
