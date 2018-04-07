@@ -9,24 +9,34 @@ function Go(options) {
     this.shownumber = options.shownumber | false; //是否显示棋子步序
     this.showcords = options.showcords | false; //是否显示坐标
     this.divname = options.divname; //在哪个dom中渲染棋谱
-    this.boardwidth = options.boardwidth | 480; //棋盘大小（现在因固定棋格宽度，暂不起作用。用于以后响应式调整棋盘大小）
-    //console.log(this.boardwidth);
+    this.boardwidth = options.boardwidth;
+    //棋盘大小（现在因固定棋格宽度，暂不起作用。用于以后响应式调整棋盘大小）
+    this.gridwidth=25;
     this.step=0; //棋谱步序
     this.canclick=true; //是否能够点击棋盘落子
 }
 
 //初始化棋盘
     Go.prototype.init = function () {
-        let html = this.drawBoard();
-        let board=document.getElementById(this.divname);
+        console.log(this.boardwidth);
+    let board=document.getElementById(this.divname);
         board.style.width=this.boardwidth+'px';
+        board.style.height=this.boardwidth+'px';
+
+        board.parentNode.style.width=this.boardwidth+40+'px';
+        board.parentNode.style.height=this.boardwidth+40+'px';
+        this.gridwidth=Math.floor(this.boardwidth/20);
+        let html = this.drawBoard();
+
         //console.log(this.boardwidth);
         board.innerHTML = html;
         if(this.showcords){
             this.setCordinate();
         }
         let grids = document.querySelectorAll('.grid');  //棋盘交叉点集合
-        grids.forEach(function (node) {       // 为每个交叉点设置点击交互
+        grids.forEach(function (node) {// 为每个交叉点设置点击交互
+            node.style.width=this.gridwidth+'px';
+            node.style.height=this.gridwidth+'px';
             node.addEventListener('click', function (e) {
                 if(this.canclick==false){ //判断能否点击落子
                     return;
@@ -70,7 +80,8 @@ function Go(options) {
             else if (gid % 19 == 0) grid = 'grid_b_w.gif';
             else grid = 'grid_white.gif';
         }
-        node.setAttribute('style',"background-image:url(assets/"+grid+")");
+        node.setAttribute('style',"background-image:url(assets/"+grid+"); line-height:"+this.gridwidth+'px');
+        node.style.height=node.style.width=this.gridwidth+'px';
         if(this.shownumber==true){
             if(redraw==true){ //如果是查看状态，则用renderNum方法渲染棋子步序数字
                 this.renderNum(node,gid,turn);
@@ -242,6 +253,8 @@ function Go(options) {
             this.status[grid] = -1;
             grids[grid].setAttribute('style',"background-image:url(assets/"+this.makeGrid(grid)+")");
             grids[grid].innerText='';
+            grids[grid].style.width=this.gridwidth+'px';
+            grids[grid].style.height=this.gridwidth+'px';
         }
     }
 
@@ -319,7 +332,7 @@ function Go(options) {
 
     //设置棋盘坐标
     Go.prototype.setCordinate=function () {
-        document.getElementById(this.divname).style.width=this.boardwidth+20+'px';
+        document.getElementById(this.divname).style.width=this.boardwidth+'px';
         let cordchar='ABCDEFGHIJKLMNOPQRS';
         let cols=document.querySelectorAll('.chesscol');
         // for(let i=0;i<cols.length;i++){
@@ -332,14 +345,18 @@ function Go(options) {
             let topcord=document.createElement('div');
             topcord.className='cordtop';
             topcord.innerText=i;
+            topcord.style.width=this.gridwidth+'px';
+            topcord.style.height=this.gridwidth+'px';
+            topcord.setAttribute('style','line-height:'+this.gridwidth+'px');
             cols[i].prepend(topcord);
         }
-        let html='<div class="cordleft"></div>';
+        let html='<div class="cordtop" style="height:'+this.gridwidth+'px'+'"> </div>';
         for(let i=0;i<19;i++){
-            html+='<div class="cordleft">'+cordchar[i]+"</div>";
+            html+='<div class="cordleft" style="line-height:'+this.gridwidth+'px;" >'+cordchar[i]+"</div>";
         }
         let leftcord=document.createElement('div');
         leftcord.className='chesscol';
+        //leftcord.setAttribute('style','padding-top:'+parseInt((Math.floor(this.gridwidth/2))+24)+'px');
         leftcord.innerHTML=html;
         cols[0].before(leftcord);
 
@@ -426,6 +443,7 @@ function Go(options) {
         }else{
             node.setAttribute('style',"background-image:url(assets/"+this.makeGrid(gid)+")");
             node.innerText='';
+            node.style.width=node.style.height=this.gridwidth+'px';
         }
     }
 

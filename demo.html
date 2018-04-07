@@ -9,17 +9,15 @@
 
 
         #board{
-            background: #ff9900;
             overflow: hidden;
             padding:20px 20px;
-            padding-bottom:0px;
-            width:500px;
-            height:500px;
+            padding-bottom:20px;
+
         }
         #wrapper{
             background: #ff9900;
-            width:540px;
             margin:30px;
+            padding-bottom:30px;
         }
 
 
@@ -36,7 +34,7 @@
            margin:0;
            background-size:contain ;
             text-align: center;
-           line-height:26px;
+           vertical-align: middle;
            font-size:10px;
        }
         .grid:hover{
@@ -44,23 +42,17 @@
         }
 
         .cordtop{
-            height:12px;
-            width:25px;
+
             margin:0;
-            padding-top:10px;
             text-align: center;
-            line-height:12px;
-            font-size:10px;
+            font-size:90%;
         }
 
         .cordleft{
-            height:25px;
-            width:12px;
             margin:0;
             padding-left:10px;
             text-align: center;
-            line-height:20px;
-            font-size:10px;
+            font-size:90%;
         }
 
         #tool{
@@ -127,7 +119,7 @@
 </div>
 <script type="text/javascript" src="tulipgo.js"></script>
 <script type="text/javascript">
-    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:480});
+    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:540});
     qipu.init('board');
     let btn_search=document.getElementById('btn_search');
     btn_search.addEventListener('click',function () {
