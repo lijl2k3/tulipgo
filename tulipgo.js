@@ -448,12 +448,15 @@ function Go(options) {
 
     //撤销落子
     Go.prototype.undo=function () {
-        this.grouprecords.pop();
-        if(this.grouprecords.length>0) {
-            let group = this.grouprecords[this.grouprecords.length - 1];
+        if(this.grouprecords.length==0){
+            return;
         }
-        else  group={0:[],1:[]};
-        this.group=JSON.parse(JSON.stringify(group));
+        this.grouprecords.pop();
+        let latestgroup = this.grouprecords[this.grouprecords.length - 1];
+        if(this.grouprecords.length<=0) {
+            latestgroup={0:[],1:[]};
+        }
+        this.group=JSON.parse(JSON.stringify(latestgroup));
         this.records.pop();
         this.turn=(this.turn==0)?1:0;
         this.stepLast();
