@@ -18,13 +18,12 @@ function Go(options) {
 
 //初始化棋盘
     Go.prototype.init = function () {
-        console.log(this.boardwidth);
     let board=document.getElementById(this.divname);
         board.style.width=this.boardwidth+'px';
         board.style.height=this.boardwidth+'px';
 
         board.parentNode.style.width=this.boardwidth+40+'px';
-        board.parentNode.style.height=this.boardwidth+40+'px';
+        board.parentNode.style.height=this.boardwidth+60+'px';
         this.gridwidth=Math.floor(this.boardwidth/20);
         let html = this.drawBoard();
 
@@ -54,6 +53,30 @@ function Go(options) {
             }.bind(this))
         }.bind(this));
 
+    }
+
+    Go.prototype.resizeGrid=function (size) {
+        this.gridwidth=size;
+        let grids=document.querySelectorAll('.grid');
+        grids.forEach(function (node) {
+            node.style.width=size+'px';
+            node.style.height=size+'px';
+        }.bind(this));
+        this.boardwidth=size*20;
+        let board=document.getElementById(this.divname);
+        board.style.width=this.boardwidth+'px';
+        board.style.height=this.boardwidth+'px';
+        board.parentNode.style.width=this.boardwidth+40+'px';
+        board.parentNode.style.height=this.boardwidth+60+'px';
+        this.clearBoard();
+        this.stepTo(this.step);
+        if(this.step==this.records.length){
+            this.canclick=true;
+        }
+        if(this.showcords){
+            this.clearCordinate();
+            this.setCordinate();
+        }
     }
 
     //在棋盘画面根据当前落子的次序和编号绘制棋子

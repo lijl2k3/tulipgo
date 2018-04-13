@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_581148_bq76mur51jdcxr.css" type="text/css" />
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_581148_yhzgvhpvzmbcsor.css" type="text/css" />
     <title>Title</title>
     <style>
 
@@ -64,11 +64,15 @@
         #tool ul {
             margin-top:0;
             padding:0;
-            padding-bottom:20px;
+
         }
         #panel_nav{
             float:right;
             margin-right: 30px;
+        }
+
+        #panel_tools{
+            margin-left:80px;
         }
         #tool ul li{
             color:#444;
@@ -114,12 +118,17 @@
             <li id="search"><input type="text" size="2"  id="searchstep" /><i class="iconfont icon-sousuo" id="btn_search"></i></li>
             <li id="next" onclick="qipu.stepNext()"><i class="iconfont icon-xiayiye"></i></li>
             <li id="last" onclick="qipu.stepLast()"><i class="iconfont icon-ai09"></i></li>
+
+        </ul>
+        <ul id="panel_tools">
+            <li id="zoomin" onclick="zoomIn()"><i class="iconfont icon-plus"></i></li>
+            <li id="zoomout" onclick="zoomOut()"><i class="iconfont icon-minus"></i></li>
         </ul>
     </div>
 </div>
 <script type="text/javascript" src="tulipgo.js"></script>
 <script type="text/javascript">
-    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:540});
+    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:600});
     qipu.init('board');
     let btn_search=document.getElementById('btn_search');
     btn_search.addEventListener('click',function () {
@@ -130,6 +139,19 @@
             qipu.stepTo(num);
         }
     })
+    function zoomIn(){
+        if(qipu.gridwidth>=36){
+            return;
+        }
+        qipu.resizeGrid(qipu.gridwidth+3);
+    }
+
+    function zoomOut(){
+        if(qipu.gridwidth<=24){
+            return;
+        }
+        qipu.resizeGrid(qipu.gridwidth-3);
+    }
 </script>
 
 </body>
