@@ -224,6 +224,7 @@ function Go(options) {
         if (captured.length == 1) { //如果提了一子，且过了打劫检测，则设置打劫属性以备以后打劫判断
             this.ko = [captured[0], gid];
         }
+        else this.ko=[];
 
         for(num of groupindex){
             this.group[color].splice(num, 1); //从当前棋块中删除被提子的棋块
@@ -311,6 +312,9 @@ function Go(options) {
             turn: this.turn,
             stone: gid
         });
+        if(this.ko.length>0){
+            this.records[this.records.length-1].ko=this.ko;
+        }
         let group=JSON.parse(JSON.stringify(this.group)) //将本轮的group转换为独立对象后存入grouprecords. 如果不转换，因为group每轮次都会变动，无法存入数组
         this.grouprecords.push(group);
         //console.log(this.grouprecords);
@@ -499,6 +503,9 @@ function Go(options) {
         }
         this.group=JSON.parse(JSON.stringify(latestgroup));
         this.records.pop();
+        if(this.records[this.records.length-1].ko){
+            this.ko=this.records[this.records.length-1].ko;
+        }
         this.turn=(this.turn==0)?1:0;
         this.stepLast();
     }

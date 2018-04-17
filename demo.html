@@ -128,7 +128,7 @@
 </div>
 <script type="text/javascript" src="tulipgo.js"></script>
 <script type="text/javascript">
-    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:600});
+    var qipu=new Go({shownumber:true,showcords:true,divname:'board',boardwidth:480});
     qipu.init('board');
     let btn_search=document.getElementById('btn_search');
     btn_search.addEventListener('click',function () {
@@ -147,7 +147,7 @@
     }
 
     function zoomOut(){
-        if(qipu.gridwidth<=24){
+        if(qipu.gridwidth<=12){
             return;
         }
         qipu.resizeGrid(qipu.gridwidth-3);
