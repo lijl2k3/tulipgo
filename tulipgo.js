@@ -3,7 +3,7 @@ function Go(options) {
     this.records = []; //棋谱次序记录
     this.grouprecords = [];//棋谱每一步的棋块记录
     this.turn = 0; //当前次序。0为黑，1为白
-    this.ko = []; //为判断打劫而设的变量。如果本轮有提子且提子数为1，则将该被提子的编号和当前所下子的编号记录到数组中
+    this.ko = -1; //为判断打劫而设的变量。如果本轮有提子且提子数为1，则将该被提子的编号和当前所下子的编号记录到数组中
     this.group = {0: [], 1: []};//棋盘上所有与本色棋子连线而组成的区块+本色棋子独立而成的区块，0为黑区块组，1为白区块组
     this.captured = {0: 0, 1: 0};//被提子的数量。0为被提黑子，1为被提白子
     this.shownumber = options.shownumber | false; //是否显示棋子步序
@@ -216,15 +216,16 @@ function Go(options) {
                 groupindex.push(this.group[color].indexOf(group));
             }
         }
-        if (captured.length == 1 && this.ko.length > 0) { //如果提了一个子，则进行打劫检测
+        if (captured.length == 1) { //如果提了一个子，则进行打劫检测
             if (!this.checkKo(gid)) {
                 return -1;
             }
         }
         if (captured.length == 1) { //如果提了一子，且过了打劫检测，则设置打劫属性以备以后打劫判断
-            this.ko = [captured[0], gid];
+            this.ko = captured[0];
+            console.log(this.ko);
         }
-        else this.ko=[];
+        else this.ko=-1;
 
         for(num of groupindex){
             this.group[color].splice(num, 1); //从当前棋块中删除被提子的棋块
@@ -299,7 +300,7 @@ function Go(options) {
 
     //检查是否打劫禁手。是禁手则把棋子编号状态改回-1,并返回false
     Go.prototype.checkKo = function (gid) {
-        if (this.ko[0] == gid && this.records[this.records.length - 1].stone == this.ko[1]) {
+        if (this.ko == gid ) {
             this.status[gid] = -1;
             return false;
         }
@@ -312,11 +313,8 @@ function Go(options) {
             turn: this.turn,
             stone: gid
         });
-        if(this.ko.length>0){
-            this.records[this.records.length-1].ko=this.ko;
-        }
         let group=JSON.parse(JSON.stringify(this.group)) //将本轮的group转换为独立对象后存入grouprecords. 如果不转换，因为group每轮次都会变动，无法存入数组
-        this.grouprecords.push(group);
+        this.grouprecords.push({ko:this.ko,group:group});
         //console.log(this.grouprecords);
     }
 
@@ -345,7 +343,7 @@ function Go(options) {
 
     //在棋块中查找棋子，如找到则返回棋子步序  gid: dom编号 turn:黑/白
     Go.prototype.findGridInGroup=function (gid,turn) {
-        let groups=this.grouprecords[this.step-1];
+        let groups=this.grouprecords[this.step-1].group;
         for (let group of groups[turn]){
             index=group.find(function (data) {
                 return gid==data.stone;
@@ -476,18 +474,21 @@ function Go(options) {
 
     //调整棋盘在查看时的状态,填充this.status
     Go.prototype.loadBoard=function () {
-        let groups=this.grouprecords[this.step-1];
-        let arr={0:[],1:[]};
-        for(let color in groups){
-            for(let group of groups[color]){
-                arr[color]=arr[color].concat(group);
+        if(this.grouprecords.length>0) {
+            let groups = this.grouprecords[this.step - 1].group;
+
+            let arr = {0: [], 1: []};
+            for (let color in groups) {
+                for (let group of groups[color]) {
+                    arr[color] = arr[color].concat(group);
+
+                }
+
+                for (let data of arr[color]) {
+                    this.status[data.stone] = parseInt(color);
+                }
 
             }
-
-            for(let data of arr[color]){
-                this.status[data.stone]=parseInt(color);
-            }
-
         }
     }
 
@@ -497,15 +498,16 @@ function Go(options) {
             return;
         }
         this.grouprecords.pop();
-        let latestgroup = this.grouprecords[this.grouprecords.length - 1];
-        if(this.grouprecords.length<=0) {
-            latestgroup={0:[],1:[]};
+        if(this.grouprecords.length==0) {
+            let latestgroup={0:[],1:[]};
         }
+        else latestgroup = this.grouprecords[this.grouprecords.length - 1].group;
+
         this.group=JSON.parse(JSON.stringify(latestgroup));
-        this.records.pop();
-        if(this.records[this.records.length-1].ko){
-            this.ko=this.records[this.records.length-1].ko;
+        if(this.grouprecords.length>0) {
+            this.ko = this.grouprecords[this.grouprecords.length - 1].ko;
         }
+        this.records.pop();
         this.turn=(this.turn==0)?1:0;
         this.stepLast();
     }
