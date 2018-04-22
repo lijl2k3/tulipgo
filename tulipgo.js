@@ -223,7 +223,6 @@ function Go(options) {
         }
         if (captured.length == 1) { //如果提了一子，且过了打劫检测，则设置打劫属性以备以后打劫判断
             this.ko = captured[0];
-            console.log(this.ko);
         }
         else this.ko=-1;
 
@@ -497,12 +496,12 @@ function Go(options) {
         if(this.grouprecords.length==0){
             return;
         }
+        let latestgroup={0:[],1:[]};
         this.grouprecords.pop();
-        if(this.grouprecords.length==0) {
-            let latestgroup={0:[],1:[]};
+        if(this.grouprecords.length!=0) {
+            latestgroup = this.grouprecords[this.grouprecords.length - 1].group;
         }
-        else latestgroup = this.grouprecords[this.grouprecords.length - 1].group;
-
+        //console.log(latestgroup);
         this.group=JSON.parse(JSON.stringify(latestgroup));
         if(this.grouprecords.length>0) {
             this.ko = this.grouprecords[this.grouprecords.length - 1].ko;
