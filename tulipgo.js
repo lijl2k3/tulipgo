@@ -206,14 +206,14 @@ function Go(options) {
     Go.prototype.checkEnemy = function (gid) {
         let color = (this.turn == 0) ? 1 : 0;
         let captured = [];
-        let groupindex=[];
+        let groupcaptured=[];
         for (let group of this.group[color]) {
             if (this.checkEat(group) == false) {
                 let stones=group.map(function (data) {
                     return data.stone;
                 })
                 captured = captured.concat(stones); //合并所提棋子块内的棋子
-                groupindex.push(this.group[color].indexOf(group));
+                groupcaptured.push(group);
             }
         }
         if (captured.length == 1) { //如果提了一个子，则进行打劫检测
@@ -226,9 +226,15 @@ function Go(options) {
         }
         else this.ko=-1;
 
-        for(num of groupindex){
-            this.group[color].splice(num, 1); //从当前棋块中删除被提子的棋块
-        }
+        this.group[color]=this.group[color].filter(function (group) {//从当前棋块中删除被提子的棋块
+           for(let captured of groupcaptured){
+               if(group==captured){
+                   return false;
+               }
+           }
+           return true;
+        })
+
 
 
 
